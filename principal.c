@@ -1,15 +1,15 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-typedef struct aeroporto{
+typedef struct aeroporto {
     char codigo[10];
     char nome[50];
     char cidade[50];
     char estado[3];
 } Aeroporto;
 
-typedef struct rota{
+typedef struct rota {
     char codigo[10];
     char nome[50]; 
     char origem[10];
@@ -20,7 +20,7 @@ typedef struct rota{
     float distanciaMilhas;
 } Rota;
 
-typedef struct cliente{
+typedef struct cliente {
     int codigo;
     char nome[100];
     char RG[15];
@@ -32,12 +32,21 @@ typedef struct cliente{
     char bagagemExtra;
 } Cliente;
 
-typedef struct funcionario{
+typedef struct funcionario {
     int matricula;
     char nome[100];
     char cargo[50];
 } Funcionario;
 
+
+void cadastrarAeroporto();
+void cadastrarRota();
+void cadastrarPassageiro();
+void alterarDadosPassageiro();
+void cadastrarFuncionario();
+void alterarFuncionario();
+void menuConfiguracoes();
+void menuVendas();
 
 void menuConfiguracoes() {
     int opcao;
@@ -46,23 +55,24 @@ void menuConfiguracoes() {
         printf("[1] Cadastrar Aeroportos\n");
         printf("[2] Cadastrar Rotas\n");
         printf("[3] Cadastrar passageiros fidelizados\n");
-        printf("[4] Alterados dados de passageiros\n");
+        printf("[4] Alterar dados de passageiros\n");
         printf("[5] Cadastrar Funcionários\n");
-        printf("[6] Pesquisar/Alterar Funcionarios\n");
+        printf("[6] Pesquisar/Alterar Funcionários\n");
         printf("[7] Voltar\n");
+        printf("Escolha uma opção: ");
         scanf("%d", &opcao);
 
-        switch(opcao) {
+        switch (opcao) {
             case 1: cadastrarAeroporto(); break;
             case 2: cadastrarRota(); break;
             case 3: cadastrarPassageiro(); break;
             case 4: alterarDadosPassageiro(); break;
             case 5: cadastrarFuncionario(); break;
             case 6: alterarFuncionario(); break;
-            case 7: break;
+            case 7: printf("Voltando...\n"); break;
             default: printf("Opção inválida!\n");
         }
-    } while(opcao != 7);
+    } while (opcao != 7);
 }
 
 void cadastrarAeroporto() {
@@ -140,7 +150,8 @@ void cadastrarPassageiro() {
     printf("E-mail: ");
     scanf("%s", cliente.email);
     printf("Contato de emergência (opcional, pressione Enter para ignorar): ");
-    scanf(" %[^\n]", cliente.contatoEmergencia);
+    getchar();
+    fgets(cliente.contatoEmergencia, sizeof(cliente.contatoEmergencia), stdin);
     printf("Bagagem extra acima de 10Kg? (S/N): ");
     scanf(" %c", &cliente.bagagemExtra);
 
@@ -148,37 +159,6 @@ void cadastrarPassageiro() {
     fclose(file);
 
     printf("Passageiro cadastrado com sucesso!\n");
-}
-
-void alterarDadosPassageiro() {
-    FILE *file = fopen("clientes.dat", "rb+");
-    if (file == NULL) {
-        printf("Erro ao abrir o arquivo de clientes.\n");
-        return;
-    }
-
-    int codigo;
-    Cliente cliente;
-    printf("Informe o código do passageiro que deseja alterar: ");
-    scanf("%d", &codigo);
-
-    while (fread(&cliente, sizeof(Cliente), 1, file)) {
-        if (cliente.codigo == codigo) {
-            printf("Novo telefone: ");
-            scanf("%s", cliente.telefone);
-            printf("Novo e-mail: ");
-            scanf("%s", cliente.email);
-
-            fseek(file, -sizeof(Cliente), SEEK_CUR);
-            fwrite(&cliente, sizeof(Cliente), 1, file);
-            fclose(file);
-            printf("Dados do passageiro alterados com sucesso!\n");
-            return;
-        }
-    }
-
-    fclose(file);
-    printf("Passageiro não encontrado!\n");
 }
 
 void cadastrarFuncionario() {
@@ -202,51 +182,30 @@ void cadastrarFuncionario() {
     printf("Funcionário cadastrado com sucesso!\n");
 }
 
-void alterarFuncionario() {
-    FILE *file = fopen("funcionarios.dat", "rb+");
-    if (file == NULL) {
-        printf("Erro ao abrir o arquivo de funcionários.\n");
-        return;
-    }
-
-    int matricula;
-    Funcionario funcionario;
-    printf("Informe a matrícula do funcionário que deseja alterar: ");
-    scanf("%d", &matricula);
-
-    while (fread(&funcionario, sizeof(Funcionario), 1, file)) {
-        if (funcionario.matricula == matricula) {
-            printf("Novo cargo: ");
-            scanf(" %[^\n]", funcionario.cargo);
-
-            fseek(file, -sizeof(Funcionario), SEEK_CUR);
-            fwrite(&funcionario, sizeof(Funcionario), 1, file);
-            fclose(file);
-            printf("Dados do funcionário alterados com sucesso!\n");
-            return;
-        }
-    }
-
-    fclose(file);
-    printf("Funcionário não encontrado!\n");
+void alterarDadosPassageiro() {
+    printf("Função alterarDadosPassageiro ainda não implementada.\n");
 }
 
+void alterarFuncionario() {
+    printf("Função alterarFuncionario ainda não implementada.\n");
+}
 
 int main() {
     int opcao;
     do {
         printf("\nMenu Principal:\n");
         printf("[1] Configurações\n");
-        printf("[2] Vendas\n");
+        printf("[2] Vendas (Em desenvolvimento...)\n");
         printf("[3] Sair\n");
+        printf("Escolha uma opção: ");
         scanf("%d", &opcao);
 
-        switch(opcao) {
+        switch (opcao) {
             case 1: menuConfiguracoes(); break;
-            case 2: menuVendas(); break;
+            case 2: printf("Módulo de vendas ainda não implementado.\n"); break;
             case 3: printf("Saindo...\n"); break;
             default: printf("Opção inválida!\n");
         }
-    } while(opcao != 3);
+    } while (opcao != 3);
     return 0;
 }
