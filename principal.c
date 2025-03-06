@@ -161,26 +161,52 @@ void cadastrarPassageiro() {
     printf("Passageiro cadastrado com sucesso!\n");
 }
 
+int funcionarioExiste(int matricula) {
+    FILE *file = fopen("funcionarios.dat", "rb");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo de funcionários.\n");
+        return 0;
+    }
+    
+    Funcionario funcionario;
+    while (fread(&funcionario, sizeof(Funcionario), 1, file)) {
+        if (funcionario.matricula == matricula) {
+            fclose(file);
+            return 1; // Funcionário encontrado
+        }
+    }
+    fclose(file);
+    return 0; // Funcionário não encontrado
+}
+
 void cadastrarFuncionario() {
     FILE *file = fopen("funcionarios.dat", "ab");
     if (file == NULL) {
         printf("Erro ao abrir o arquivo de funcionários.\n");
         return;
     }
-
+    
     Funcionario funcionario;
     printf("Matrícula: ");
     scanf("%d", &funcionario.matricula);
+    
+    if (funcionarioExiste(funcionario.matricula)) {
+        printf("Funcionário já cadastrado!\n");
+        fclose(file);
+        return;
+    }
+    
     printf("Nome: ");
     scanf(" %[^\n]", funcionario.nome);
     printf("Cargo: ");
     scanf(" %[^\n]", funcionario.cargo);
-
+    
     fwrite(&funcionario, sizeof(Funcionario), 1, file);
     fclose(file);
-
+    
     printf("Funcionário cadastrado com sucesso!\n");
 }
+
 
 void alterarDadosPassageiro() {
     FILE *file = fopen("clientes.dat", "rb+"), *temp;
