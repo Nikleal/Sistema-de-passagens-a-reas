@@ -183,12 +183,86 @@ void cadastrarFuncionario() {
 }
 
 void alterarDadosPassageiro() {
-    printf("Função alterarDadosPassageiro ainda não implementada.\n");
+    FILE *file = fopen("clientes.dat", "rb+"), *temp;
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo de clientes.\n");
+        return;
+    }
+    
+    int codigo;
+    printf("Digite o código do passageiro que deseja alterar: ");
+    scanf("%d", &codigo);
+    
+    Cliente cliente;
+    int encontrado = 0;
+    while (fread(&cliente, sizeof(Cliente), 1, file)) {
+        if (cliente.codigo == codigo) {
+            encontrado = 1;
+            printf("Novo nome: ");
+            scanf(" %[^\n]", cliente.nome);
+            printf("Novo RG: ");
+            scanf("%s", cliente.RG);
+            printf("Novo CPF: ");
+            scanf("%s", cliente.CPF);
+            printf("Nova data de nascimento (DD/MM/AAAA): ");
+            scanf("%s", cliente.dataNascimento);
+            printf("Novo telefone: ");
+            scanf("%s", cliente.telefone);
+            printf("Novo e-mail: ");
+            scanf("%s", cliente.email);
+            printf("Novo contato de emergência: ");
+            getchar();
+            fgets(cliente.contatoEmergencia, sizeof(cliente.contatoEmergencia), stdin);
+            printf("Bagagem extra acima de 10Kg? (S/N): ");
+            scanf(" %c", &cliente.bagagemExtra);
+            
+            fseek(file, -sizeof(Cliente), SEEK_CUR);
+            fwrite(&cliente, sizeof(Cliente), 1, file);
+            break;
+        }
+    }
+    fclose(file);
+    
+    if (encontrado)
+        printf("Dados do passageiro alterados com sucesso!\n");
+    else
+        printf("Passageiro não encontrado!\n");
 }
 
 void alterarFuncionario() {
-    printf("Função alterarFuncionario ainda não implementada.\n");
+    FILE *file = fopen("funcionarios.dat", "rb+"), *temp;
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo de funcionários.\n");
+        return;
+    }
+    
+    int matricula;
+    printf("Digite a matrícula do funcionário que deseja alterar: ");
+    scanf("%d", &matricula);
+    
+    Funcionario funcionario;
+    int encontrado = 0;
+    while (fread(&funcionario, sizeof(Funcionario), 1, file)) {
+        if (funcionario.matricula == matricula) {
+            encontrado = 1;
+            printf("Novo nome: ");
+            scanf(" %[^\n]", funcionario.nome);
+            printf("Novo cargo: ");
+            scanf(" %[^\n]", funcionario.cargo);
+            
+            fseek(file, -sizeof(Funcionario), SEEK_CUR);
+            fwrite(&funcionario, sizeof(Funcionario), 1, file);
+            break;
+        }
+    }
+    fclose(file);
+    
+    if (encontrado)
+        printf("Dados do funcionário alterados com sucesso!\n");
+    else
+        printf("Funcionário não encontrado!\n");
 }
+
 
 int main() {
     int opcao;
