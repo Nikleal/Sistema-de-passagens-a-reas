@@ -1,0 +1,11 @@
+typedef struct clientes{
+    int codigo;
+    char nome[100];
+    char RG[15];
+    char CPF[15];
+    char dataNascimento[11]; // DD/MM/AAAA
+    char telefone[20];
+    char email[100];
+    char contatoEmergencia[100]; // Opcional
+    char bagagemExtra; // 'S' para SIM e 'N' para NÃO
+} Cliente;

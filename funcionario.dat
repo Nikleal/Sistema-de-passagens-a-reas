@@ -1,0 +1,5 @@
+typedef struct funcionario{
+    int matricula;
+    char nome[100];
+    char cargo[50];
+} Funcionario;

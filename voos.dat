@@ -1,0 +1,17 @@
+typedef struct aeroporto{
+    char codigo[10];
+    char nome[50];
+    char cidade[50];
+    char estado[3];
+} Aeroporto;
+
+typedef struct rotas{
+    char codigo[10];
+    char nome[50]; 
+    char origem[10];  
+    char destino[10]; 
+    int horarioHoras;
+    int horarioMinutos;
+    int poltronasDisponiveis;
+    float distanciaMilhas;
+} Rota;
